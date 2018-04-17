@@ -32,7 +32,7 @@ func (rr *RegexRow) IsValidRow() bool {
 func (rr *RegexRow) join() string {
 	var result []string
 	for _, cell := range rr.Cells {
-		result = append(result, cell.Content)
+		result = append(result, cell.GetCellContent())
 	}
 	return strings.Join(result, "")
 }
