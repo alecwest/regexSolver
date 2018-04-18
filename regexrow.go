@@ -17,16 +17,21 @@ func (rr *RegexRow) AddCell(rc *RegexCell) {
 	rr.Cells = append(rr.Cells, rc)
 }
 
-// AddExpression adds a Regexp element to the list of Expressions that apply to this row.
+// AddExpression adds a Regexp element to the list of Expressions that
+// apply to this row.
 func (rr *RegexRow) AddExpression(e *regexp.Regexp) {
 	rr.Expressions = append(rr.Expressions, e)
 }
 
-// IsValidRow returns a boolean indicating whether or not all regular expressions
-// that apply to the given row are valid against it.
+// IsValidRow returns a boolean indicating whether or not all regular
+// expressions that apply to the given row are valid against it.
 func (rr *RegexRow) IsValidRow() bool {
-
-	return false
+	for _, test := range rr.Expressions {
+		if !test.MatchString(rr.join()) {
+			return false
+		}
+	}
+	return true
 }
 
 func (rr *RegexRow) join() string {
