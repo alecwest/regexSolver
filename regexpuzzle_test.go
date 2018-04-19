@@ -46,3 +46,26 @@ func TestDeclareCell(t *testing.T) {
 		t.Errorf("Unexpected number of cells in RegexRow. Got %d, expected %d", resultNumInRow2, expectedNumInRow2)
 	}
 }
+
+func TestGetRowByRegex(t *testing.T) {
+	var rp RegexPuzzle
+	regex1 := regexp.MustCompile("abc")
+	regex2 := regexp.MustCompile("bcd")
+	regex3 := regexp.MustCompile("123")
+	regex4 := regexp.MustCompile("234")
+	rp.DeclareRow(regex1, regex2)
+	rp.DeclareRow(regex3, regex4)
+
+	row := rp.GetRowByRegex(regex1, regex2)
+	if row == nil {
+		t.Errorf("Row was not found!")
+	}
+	row2 := rp.GetRowByRegex(regex4, regex3)
+	if row2 == nil {
+		t.Errorf("Row was not found!")
+	}
+	row3 := rp.GetRowByRegex(regex1, regex4)
+	if row3 != nil {
+		t.Errorf("Row should not have been found!")
+	}
+}
