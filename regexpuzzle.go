@@ -37,8 +37,8 @@ func (rp *RegexPuzzle) DeclareCell(parents ...*RegexRow) {
 	rp.Cells = append(rp.Cells, cell)
 }
 
-// getRowByRegex returns the row that is associated with all of the passed regex
-func (rp *RegexPuzzle) getRowByRegex(regex ...*regexp.Regexp) *RegexRow {
+// GetRowByRegex returns the row that is associated with all of the passed regex
+func (rp *RegexPuzzle) GetRowByRegex(regex ...*regexp.Regexp) *RegexRow {
 	for _, row := range rp.CellRows {
 		match := 0
 		for _, expr := range row.Expressions {
