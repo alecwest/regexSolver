@@ -21,14 +21,17 @@ func TestDeclareCell(t *testing.T) {
 	regex2 := regexp.MustCompile("bcd")
 	regex3 := regexp.MustCompile("123")
 	regex4 := regexp.MustCompile("234")
+	regex5 := regexp.MustCompile("345")
 	rp.DeclareRow(regex1, regex2)
-	rp.DeclareRow(regex3, regex4)
+	rp.DeclareRow(regex2, regex5)
+	rp.DeclareRow(regex3, regex4, regex5)
 	rp.DeclareCell(
 		rp.GetRowByRegex(regex1, regex2),
-		rp.GetRowByRegex(regex4, regex3), // Order shouldn't matter
+		rp.GetRowByRegex(regex4, regex5, regex3), // Order shouldn't matter
 	)
 	rp.DeclareCell(
 		rp.GetRowByRegex(regex2, regex1),
+		rp.GetRowByRegex(regex2, regex5),
 	)
 	resultNumCells := len(rp.Cells)
 	expectedNumCells := 2
