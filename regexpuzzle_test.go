@@ -33,17 +33,17 @@ func TestDeclareCell(t *testing.T) {
 	resultNumCells := len(rp.Cells)
 	expectedNumCells := 2
 	if resultNumCells != expectedNumCells {
-		t.Errorf("Unexpected number of cells in RegexPuzzle. Got %d, expected %d", resultNumCells, expectedNumCells)
+		t.Errorf("Unexpected number of cells in RegexPuzzle. Got %d, expected %d, rp is %s", resultNumCells, expectedNumCells, rp)
 	}
-	resultNumInRow1 := len(rp.GetRowByRegex(regex1, regex2).Cells)
+	resultNumInRow1 := len(rp.CellRows[0].Cells)
 	expectedNumInRow1 := 2
 	if resultNumInRow1 != expectedNumInRow1 {
-		t.Errorf("Unexpected number of cells in RegexRow. Got %d, expected %d", resultNumInRow1, expectedNumInRow1)
+		t.Errorf("Unexpected number of cells in RegexRow. Got %d, expected %d, rp is %s", resultNumInRow1, expectedNumInRow1, rp)
 	}
-	resultNumInRow2 := len(rp.GetRowByRegex(regex3, regex4).Cells)
+	resultNumInRow2 := len(rp.CellRows[1].Cells)
 	expectedNumInRow2 := 1
 	if resultNumInRow2 != expectedNumInRow2 {
-		t.Errorf("Unexpected number of cells in RegexRow. Got %d, expected %d", resultNumInRow2, expectedNumInRow2)
+		t.Errorf("Unexpected number of cells in RegexRow. Got %d, expected %d, rp is %s", resultNumInRow2, expectedNumInRow2, rp)
 	}
 }
 

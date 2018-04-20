@@ -32,8 +32,14 @@ func (rp *RegexPuzzle) DeclareRow(regex ...*regexp.Regexp) {
 func (rp *RegexPuzzle) DeclareCell(parents ...*RegexRow) {
 	var cell RegexCell
 	for _, p := range parents {
-		p.AddCell(&cell)
+		for i := range rp.CellRows {
+			if testEq(p.Expressions, rp.CellRows[i].Expressions) {
+				rp.CellRows[i].AddCell(&cell)
+				break
+			}
+		}
 	}
+	cell.SetCellContent(string(len(rp.Cells)))
 	rp.Cells = append(rp.Cells, cell)
 }
 
@@ -53,4 +59,22 @@ func (rp *RegexPuzzle) GetRowByRegex(regex ...*regexp.Regexp) *RegexRow {
 		}
 	}
 	return nil
+}
+
+func testEq(a, b []*regexp.Regexp) bool {
+	if a == nil && b == nil {
+		return true
+	}
+	if a == nil || b == nil {
+		return false
+	}
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
 }
