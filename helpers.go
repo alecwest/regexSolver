@@ -2,6 +2,15 @@ package regexsolver
 
 import "regexp"
 
+func isSolved(p *RegexPuzzle) bool {
+	for _, row := range p.CellRows {
+		if !row.IsValidRow() {
+			return false
+		}
+	}
+	return true
+}
+
 func testEq(a, b []*regexp.Regexp) bool {
 	if a == nil && b == nil {
 		return true

@@ -14,32 +14,9 @@ func TestTestEq(t *testing.T) {
 		expected bool
 	}{
 		{nil, nil, true},
-		{
-			[]*regexp.Regexp{
-				r1,
-			},
-			nil,
-			false,
-		},
-		{
-			[]*regexp.Regexp{
-				r1,
-			},
-			[]*regexp.Regexp{
-				r1,
-			},
-			true,
-		},
-		{
-			[]*regexp.Regexp{
-				r1,
-			},
-			[]*regexp.Regexp{
-				r1,
-				r2,
-			},
-			false,
-		},
+		{[]*regexp.Regexp{r1}, nil, false},
+		{[]*regexp.Regexp{r1}, []*regexp.Regexp{r1}, true},
+		{[]*regexp.Regexp{r1}, []*regexp.Regexp{r1, r2}, false},
 	}
 	for _, table := range tables {
 		if testEq(table.regex1, table.regex2) != table.expected {
