@@ -4,7 +4,7 @@ import "regexp"
 
 func isSolved(p *RegexPuzzle) bool {
 	for _, row := range p.CellRows {
-		if !row.IsValidRow() {
+		if !row.IsValidRow() || !row.IsFull() {
 			return false
 		}
 	}

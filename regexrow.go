@@ -23,6 +23,17 @@ func (rr *RegexRow) AddExpression(e *regexp.Regexp) {
 	rr.Expressions = append(rr.Expressions, e)
 }
 
+// IsFull returns a boolean indicating whether or not all cells
+// within the row have been set to some value
+func (rr *RegexRow) IsFull() bool {
+	for _, cell := range rr.Cells {
+		if len(cell.GetCellContent()) == 0 {
+			return false
+		}
+	}
+	return true
+}
+
 // IsValidRow returns a boolean indicating whether or not all regular
 // expressions that apply to the given row are valid against it.
 func (rr *RegexRow) IsValidRow() bool {
