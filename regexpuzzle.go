@@ -16,10 +16,6 @@ func (rp *RegexPuzzle) Solve() {
 
 }
 
-func (rp *RegexPuzzle) solve(p *RegexPuzzle) *RegexPuzzle {
-
-}
-
 // DeclareRow takes in all regex and applies it to a new row.
 // The new row is added to the puzzle in order, with no new cells declared
 func (rp *RegexPuzzle) DeclareRow(regex ...*regexp.Regexp) {

@@ -5,6 +5,48 @@ import (
 	"testing"
 )
 
+func TestIsSolved(t *testing.T) {
+	tables := []struct {
+		puzzle   RegexPuzzle
+		expected bool
+	}{
+		{
+			RegexPuzzle{
+				[]RegexCell{{"a"}, {"b"}, {"c"}},
+				[]RegexRow{
+					{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{regexp.MustCompile("123")}},
+				},
+			}, false,
+		},
+		{
+			RegexPuzzle{
+				[]RegexCell{{"a"}, {"b"}, {"c"}},
+				[]RegexRow{
+					{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{regexp.MustCompile("abc")}},
+				},
+			}, true,
+		},
+		{
+			// Sample table from https://regexcrossword.com/challenges/beginner/puzzles/1
+			RegexPuzzle{
+				[]RegexCell{{"h"}, {"e"}, {"l"}, {"p"}},
+				[]RegexRow{
+					{[]*RegexCell{{"h"}, {"e"}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}},
+					{[]*RegexCell{{"l"}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("[please]+")}},
+					{[]*RegexCell{{"h"}, {"l"}}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}},
+					{[]*RegexCell{{"e"}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}},
+				},
+			}, true,
+		},
+	}
+
+	for _, table := range tables {
+		if isSolved(&table.puzzle) != table.expected {
+			t.Errorf("helper isSolved returned unexpected result, got %v for table %s", !table.expected, table.puzzle)
+		}
+	}
+}
+
 func TestTestEq(t *testing.T) {
 	r1 := regexp.MustCompile("123")
 	r2 := regexp.MustCompile("456")
