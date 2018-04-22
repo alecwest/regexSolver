@@ -70,6 +70,34 @@ func TestGetRowByRegex(t *testing.T) {
 	}
 }
 
+func TestNextCell(t *testing.T) {
+	emptyCell := RegexCell{""}
+	tables := []struct {
+		puzzle   RegexPuzzle
+		expected *RegexCell
+	}{
+		{
+			RegexPuzzle{
+				[]RegexCell{{"a"}, {"b"}, {"c"}},
+				[]RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}, {[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
+			nil,
+		},
+		{
+			RegexPuzzle{
+				[]RegexCell{{"a"}, emptyCell, {"c"}},
+				[]RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
+			&emptyCell,
+		},
+	}
+
+	for _, table := range tables {
+		result := table.puzzle.NextCell()
+		if !isEqCell(table.expected, result) {
+			t.Errorf("Got unexpected cell from NextCell function. Got %s, expected %s", result, table.expected)
+		}
+	}
+}
+
 func TestNextRow(t *testing.T) {
 	expectedRow1 := RegexRow{[]*RegexCell{{"a"}, {"b"}, {""}}, []*regexp.Regexp{}}
 	expectedRow2 := RegexRow{[]*RegexCell{{""}, {"b"}, {""}}, []*regexp.Regexp{}}

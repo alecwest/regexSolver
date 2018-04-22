@@ -20,8 +20,11 @@ func (rp *RegexPuzzle) Solve() {
 func (rp *RegexPuzzle) solve(p *RegexPuzzle) *RegexPuzzle {
 	vals := strings.Split("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(){}[]/=\\?+|-_',.\"<>`~", "")
 	// nextRow := p.NextRow()
+	nextCell := p.NextCell()
 
-	for i := 0; i < len(vals); i++ {
+	for _, char := range vals {
+		nextCell.SetCellContent(char)
+		// if isCellValidInRow()
 	}
 
 	return nil
@@ -67,6 +70,16 @@ func (rp *RegexPuzzle) GetRowByRegex(regex ...*regexp.Regexp) *RegexRow {
 					return &row
 				}
 			}
+		}
+	}
+	return nil
+}
+
+// NextCell returns the first cell that is not filled in
+func (rp *RegexPuzzle) NextCell() *RegexCell {
+	for _, cell := range rp.Cells {
+		if len(cell.GetCellContent()) == 0 {
+			return &cell
 		}
 	}
 	return nil
