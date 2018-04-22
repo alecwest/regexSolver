@@ -13,6 +13,7 @@ type RegexPuzzle struct {
 	CellRows []RegexRow
 }
 
+// Solve will run a recursive backtracking algorithm to solve the puzzle
 func (rp *RegexPuzzle) Solve() {
 
 }
@@ -24,6 +25,9 @@ func (rp *RegexPuzzle) solve(p *RegexPuzzle) *RegexPuzzle {
 
 	for _, char := range vals {
 		nextCell.SetCellContent(char)
+		if isValidWithNewCell(*nextCell, *p) {
+
+		}
 		// if isCellValidInRow()
 	}
 

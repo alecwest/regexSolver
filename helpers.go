@@ -72,3 +72,17 @@ func isEqRows(a, b *RegexRow) bool {
 	}
 	return true
 }
+
+func isValid(puzzle *RegexPuzzle) bool {
+	for _, row := range puzzle.CellRows {
+		if !row.IsValidRow() {
+			return false
+		}
+	}
+	return true
+}
+
+func isValidWithNewCell(cell RegexCell, puzzle RegexPuzzle) bool {
+	puzzle.NextCell().SetCellContent(cell.GetCellContent())
+	return isValid(&puzzle)
+}
