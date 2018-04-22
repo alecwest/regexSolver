@@ -1,6 +1,8 @@
 package regexsolver
 
-import "regexp"
+import (
+	"regexp"
+)
 
 func isSolved(p *RegexPuzzle) bool {
 	for _, row := range p.CellRows {
@@ -73,7 +75,7 @@ func isEqRows(a, b *RegexRow) bool {
 	return true
 }
 
-func isValid(puzzle *RegexPuzzle) bool {
+func isValid(puzzle RegexPuzzle) bool {
 	for _, row := range puzzle.CellRows {
 		if !row.IsValidRow() {
 			return false
@@ -84,5 +86,5 @@ func isValid(puzzle *RegexPuzzle) bool {
 
 func isValidWithNewCell(cell RegexCell, puzzle RegexPuzzle) bool {
 	puzzle.NextCell().SetCellContent(cell.GetCellContent())
-	return isValid(&puzzle)
+	return isValid(puzzle)
 }

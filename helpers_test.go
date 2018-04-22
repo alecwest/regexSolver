@@ -132,3 +132,76 @@ func TestIsEqRows(t *testing.T) {
 		}
 	}
 }
+
+func TestIsValid(t *testing.T) {
+	tables := []struct {
+		puzzle   RegexPuzzle
+		expected bool
+	}{
+		{
+			// Sample table from https://regexcrossword.com/challenges/beginner/puzzles/1
+			RegexPuzzle{
+				[]RegexCell{{"h"}, {"e"}, {"l"}, {"p"}},
+				[]RegexRow{
+					{[]*RegexCell{{"h"}, {"e"}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}},
+					{[]*RegexCell{{"l"}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("[please]+")}},
+					{[]*RegexCell{{"h"}, {"l"}}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}},
+					{[]*RegexCell{{"e"}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}},
+				},
+			}, true,
+		},
+		{
+			RegexPuzzle{
+				[]RegexCell{{"h"}, {"e"}, {"l"}, {"d"}},
+				[]RegexRow{
+					{[]*RegexCell{{"h"}, {"e"}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}},
+					{[]*RegexCell{{"l"}, {"d"}}, []*regexp.Regexp{regexp.MustCompile("[please]+")}},
+					{[]*RegexCell{{"h"}, {"l"}}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}},
+					{[]*RegexCell{{"e"}, {"d"}}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}},
+				},
+			}, false,
+		},
+	}
+	for _, table := range tables {
+		if isValid(table.puzzle) != table.expected {
+			t.Errorf("Unexpected result from isValid function call on puzzle %s, expected %v", table.puzzle, table.expected)
+		}
+	}
+}
+
+func TestIsValidWithNewCell(t *testing.T) {
+	tables := []struct {
+		puzzle   RegexPuzzle
+		cell     RegexCell
+		expected bool
+	}{
+		{
+			// Sample table from https://regexcrossword.com/challenges/beginner/puzzles/1
+			RegexPuzzle{
+				[]RegexCell{{"h"}, {""}, {"l"}, {"p"}},
+				[]RegexRow{
+					{[]*RegexCell{{"h"}, {""}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}},
+					{[]*RegexCell{{"l"}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("[please]+")}},
+					{[]*RegexCell{{"h"}, {"l"}}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}},
+					{[]*RegexCell{{""}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}},
+				},
+			}, RegexCell{"e"}, true,
+		},
+		{
+			RegexPuzzle{
+				[]RegexCell{{"h"}, {"e"}, {"l"}, {""}},
+				[]RegexRow{
+					{[]*RegexCell{{"h"}, {"e"}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}},
+					{[]*RegexCell{{"l"}, {""}}, []*regexp.Regexp{regexp.MustCompile("[please]+")}},
+					{[]*RegexCell{{"h"}, {"l"}}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}},
+					{[]*RegexCell{{"e"}, {""}}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}},
+				},
+			}, RegexCell{"d"}, false,
+		},
+	}
+	for _, table := range tables {
+		if isValidWithNewCell(table.cell, table.puzzle) != table.expected {
+			t.Errorf("Unexpected result from isValidWithNewCell function call on puzzle %s with cell %s, expected %v", table.puzzle, table.cell, table.expected)
+		}
+	}
+}
