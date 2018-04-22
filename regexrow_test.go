@@ -11,8 +11,8 @@ func TestAddCell(t *testing.T) {
 		cell        *RegexCell
 		numExpected int
 	}{
-		{&RegexCell{content: "a"}, 1},
-		{&RegexCell{content: ""}, 2},
+		{&RegexCell{"a"}, 1},
+		{&RegexCell{""}, 2},
 	}
 	for _, table := range tables {
 		row.AddCell(table.cell)
@@ -89,9 +89,9 @@ func TestIsValidRow(t *testing.T) {
 
 func TestJoin(t *testing.T) {
 	var row1 RegexRow
-	row1.AddCell(&RegexCell{content: "a"})
-	row1.AddCell(&RegexCell{content: "b"})
-	row1.AddCell(&RegexCell{content: "c"})
+	row1.AddCell(&RegexCell{"a"})
+	row1.AddCell(&RegexCell{"b"})
+	row1.AddCell(&RegexCell{"c"})
 	result1 := row1.join()
 	expectedResult1 := "abc"
 	if result1 != expectedResult1 {
