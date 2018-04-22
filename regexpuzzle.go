@@ -2,6 +2,7 @@ package regexsolver
 
 import (
 	"regexp"
+	"strings"
 )
 
 // RegexPuzzle represents a two-dimensional object containing multiple cells.
@@ -14,6 +15,16 @@ type RegexPuzzle struct {
 
 func (rp *RegexPuzzle) Solve() {
 
+}
+
+func (rp *RegexPuzzle) solve(p *RegexPuzzle) *RegexPuzzle {
+	vals := strings.Split("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(){}[]/=\\?+|-_',.\"<>`~", "")
+	// nextRow := p.NextRow()
+
+	for i := 0; i < len(vals); i++ {
+	}
+
+	return nil
 }
 
 // DeclareRow takes in all regex and applies it to a new row.
@@ -33,7 +44,7 @@ func (rp *RegexPuzzle) DeclareCell(parents ...*RegexRow) {
 	var cell RegexCell
 	for _, p := range parents {
 		for i := range rp.CellRows {
-			if testEq(p.Expressions, rp.CellRows[i].Expressions) {
+			if isEqRegex(p.Expressions, rp.CellRows[i].Expressions) {
 				rp.CellRows[i].AddCell(&cell)
 				break
 			}
@@ -56,6 +67,16 @@ func (rp *RegexPuzzle) GetRowByRegex(regex ...*regexp.Regexp) *RegexRow {
 					return &row
 				}
 			}
+		}
+	}
+	return nil
+}
+
+// NextRow returns the first row that is not filled in
+func (rp *RegexPuzzle) NextRow() *RegexRow {
+	for _, row := range rp.CellRows {
+		if !row.IsFull() {
+			return &row
 		}
 	}
 	return nil

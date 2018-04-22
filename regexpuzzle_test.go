@@ -69,3 +69,53 @@ func TestGetRowByRegex(t *testing.T) {
 		t.Errorf("Row should not have been found!")
 	}
 }
+
+func TestNextRow(t *testing.T) {
+	expectedRow1 := RegexRow{[]*RegexCell{{"a"}, {"b"}, {""}}, []*regexp.Regexp{}}
+	expectedRow2 := RegexRow{[]*RegexCell{{""}, {"b"}, {""}}, []*regexp.Regexp{}}
+	expectedRow3 := RegexRow{[]*RegexCell{{""}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("[please]+")}}
+	tables := []struct {
+		puzzle   RegexPuzzle
+		expected *RegexRow
+	}{
+		{
+			RegexPuzzle{
+				[]RegexCell{{"a"}, {"b"}, {"c"}},
+				[]RegexRow{
+					{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}},
+					expectedRow1,
+					{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}},
+				},
+			}, &expectedRow1,
+		},
+		{
+			RegexPuzzle{
+				[]RegexCell{{"a"}, {"b"}, {"c"}},
+				[]RegexRow{
+					{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}},
+					expectedRow2,
+					{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}},
+				},
+			}, &expectedRow2,
+		},
+		{
+			// Sample table from https://regexcrossword.com/challenges/beginner/puzzles/1
+			RegexPuzzle{
+				[]RegexCell{{"h"}, {"e"}, {"l"}, {"p"}},
+				[]RegexRow{
+					{[]*RegexCell{{"h"}, {"e"}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}},
+					expectedRow3,
+					{[]*RegexCell{{"h"}, {""}}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}},
+					{[]*RegexCell{{"e"}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}},
+				},
+			}, &expectedRow3,
+		},
+	}
+
+	for _, table := range tables {
+		result := table.puzzle.NextRow()
+		if !isEqRows(result, table.expected) {
+			t.Errorf("Got unexpected row from NextRow function. Got %s, expected %s", result, table.expected)
+		}
+	}
+}
