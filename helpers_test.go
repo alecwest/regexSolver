@@ -76,9 +76,10 @@ func TestIsEqCells(t *testing.T) {
 		row2     *RegexRow
 		expected bool
 	}{
-		{nil, nil, true},
-		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}}, nil, false},
+		{&RegexRow{nil, []*regexp.Regexp{}}, &RegexRow{nil, []*regexp.Regexp{}}, true},
+		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}}, &RegexRow{nil, []*regexp.Regexp{}}, false},
 		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}}, &RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}}, true},
+		{&RegexRow{[]*RegexCell{&c1, &c3}, []*regexp.Regexp{}}, &RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}}, false},
 		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}}, &RegexRow{[]*RegexCell{&c1, &RegexCell{"d"}, &c3}, []*regexp.Regexp{}}, false},
 	}
 	for _, table := range tables {
@@ -102,6 +103,8 @@ func TestIsEqRows(t *testing.T) {
 		{nil, nil, true},
 		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, nil, false},
 		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, &RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, true},
+		{&RegexRow{[]*RegexCell{&c2, &c3}, []*regexp.Regexp{r1, r2}}, &RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, false},
+		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r2}}, &RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, false},
 		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, &RegexRow{[]*RegexCell{&c1, &RegexCell{"d"}, &c3}, []*regexp.Regexp{r1, r2}}, false},
 		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, &RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{regexp.MustCompile("aaa"), r2}}, false},
 	}
