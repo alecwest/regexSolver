@@ -71,22 +71,22 @@ func TestGetRowByRegex(t *testing.T) {
 }
 
 func TestNextCell(t *testing.T) {
-	emptyCell := RegexCell{""}
+	emptyCell := &RegexCell{""}
 	tables := []struct {
-		puzzle   RegexPuzzle
+		puzzle   *RegexPuzzle
 		expected *RegexCell
 	}{
 		{
-			RegexPuzzle{
-				[]RegexCell{{"a"}, {"b"}, {"c"}},
-				[]RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}, {[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
+			&RegexPuzzle{
+				[]*RegexCell{{"a"}, {"b"}, {"c"}},
+				[]*RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}, {[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
 			nil,
 		},
 		{
-			RegexPuzzle{
-				[]RegexCell{{"a"}, emptyCell, {"c"}},
-				[]RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
-			&emptyCell,
+			&RegexPuzzle{
+				[]*RegexCell{{"a"}, emptyCell, {"c"}},
+				[]*RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
+			emptyCell,
 		},
 	}
 
@@ -99,37 +99,37 @@ func TestNextCell(t *testing.T) {
 }
 
 func TestNextRow(t *testing.T) {
-	expectedRow1 := RegexRow{[]*RegexCell{{"a"}, {"b"}, {""}}, []*regexp.Regexp{}}
-	expectedRow2 := RegexRow{[]*RegexCell{{""}, {"b"}, {""}}, []*regexp.Regexp{}}
-	expectedRow3 := RegexRow{[]*RegexCell{{""}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("[please]+")}}
+	expectedRow1 := &RegexRow{[]*RegexCell{{"a"}, {"b"}, {""}}, []*regexp.Regexp{}}
+	expectedRow2 := &RegexRow{[]*RegexCell{{""}, {"b"}, {""}}, []*regexp.Regexp{}}
+	expectedRow3 := &RegexRow{[]*RegexCell{{""}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("[please]+")}}
 	tables := []struct {
-		puzzle   RegexPuzzle
+		puzzle   *RegexPuzzle
 		expected *RegexRow
 	}{
 		{
-			RegexPuzzle{
-				[]RegexCell{{"a"}, {"b"}, {"c"}},
-				[]RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
+			&RegexPuzzle{
+				[]*RegexCell{{"a"}, {"b"}, {"c"}},
+				[]*RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
 			nil,
 		},
 		{
-			RegexPuzzle{
-				[]RegexCell{{"a"}, {"b"}, {"c"}},
-				[]RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}, expectedRow1, {[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
-			&expectedRow1,
+			&RegexPuzzle{
+				[]*RegexCell{{"a"}, {"b"}, {"c"}},
+				[]*RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}, expectedRow1, {[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
+			expectedRow1,
 		},
 		{
-			RegexPuzzle{
-				[]RegexCell{{"a"}, {"b"}, {"c"}},
-				[]RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}, expectedRow2, {[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
-			&expectedRow2,
+			&RegexPuzzle{
+				[]*RegexCell{{"a"}, {"b"}, {"c"}},
+				[]*RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}, expectedRow2, {[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
+			expectedRow2,
 		},
 		{
 			// Sample table from https://regexcrossword.com/challenges/beginner/puzzles/1
-			RegexPuzzle{
-				[]RegexCell{{"h"}, {"e"}, {"l"}, {"p"}},
-				[]RegexRow{{[]*RegexCell{{"h"}, {"e"}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}}, expectedRow3, {[]*RegexCell{{"h"}, {""}}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}}, {[]*RegexCell{{"e"}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}}}},
-			&expectedRow3,
+			&RegexPuzzle{
+				[]*RegexCell{{"h"}, {"e"}, {"l"}, {"p"}},
+				[]*RegexRow{{[]*RegexCell{{"h"}, {"e"}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}}, expectedRow3, {[]*RegexCell{{"h"}, {""}}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}}, {[]*RegexCell{{"e"}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}}}},
+			expectedRow3,
 		},
 	}
 
@@ -137,6 +137,32 @@ func TestNextRow(t *testing.T) {
 		result := table.puzzle.NextRow()
 		if !isEqRows(result, table.expected) {
 			t.Errorf("Got unexpected row from NextRow function. Got %s, expected %s", result, table.expected)
+		}
+	}
+}
+
+func TestSetNextCell(t *testing.T) {
+	c1 := &RegexCell{""}
+	c2 := &RegexCell{""}
+	c3 := &RegexCell{""}
+	tables := []struct {
+		puzzle   *RegexPuzzle
+		newValue string
+	}{
+		{
+			&RegexPuzzle{
+				[]*RegexCell{c1, c2, c3},
+				[]*RegexRow{{[]*RegexCell{c1, c2, c3}, []*regexp.Regexp{}}}},
+			"a",
+		},
+	}
+	for _, table := range tables {
+		err := table.puzzle.SetNextCell(table.newValue)
+		if err != nil {
+			t.Errorf("An error occured while setting the value of the next cell: %s", err)
+		}
+		if table.puzzle.CellRows[0].Cells[0].GetCellContent() != table.newValue || table.puzzle.Cells[0].GetCellContent() != table.newValue {
+			t.Errorf("Unexpected result when setting the next cell to %s. Got %s", table.newValue, table.puzzle)
 		}
 	}
 }

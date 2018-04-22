@@ -84,7 +84,7 @@ func isValid(puzzle RegexPuzzle) bool {
 	return true
 }
 
-func isValidWithNewCell(cell RegexCell, puzzle RegexPuzzle) bool {
+func isValidWithNewCell(cell *RegexCell, puzzle *RegexPuzzle) bool {
 	puzzle.NextCell().SetCellContent(cell.GetCellContent())
-	return isValid(puzzle)
+	return isValid(*puzzle)
 }
