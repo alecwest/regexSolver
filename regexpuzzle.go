@@ -25,7 +25,7 @@ func (rp *RegexPuzzle) solve(p *RegexPuzzle) *RegexPuzzle {
 
 	for _, char := range vals {
 		nextCell.SetCellContent(char)
-		if isValidWithNewCell(*nextCell, *p) {
+		if isValidWithNewCell(nextCell, p) {
 
 		}
 		// if isCellValidInRow()
@@ -97,4 +97,11 @@ func (rp *RegexPuzzle) NextRow() *RegexRow {
 		}
 	}
 	return nil
+}
+
+// SetNextCell takes a string input and assigns it to the next
+// empty cell.
+func (rp *RegexPuzzle) SetNextCell(c string) error {
+	err := rp.NextCell().SetCellContent(c)
+	return err
 }
