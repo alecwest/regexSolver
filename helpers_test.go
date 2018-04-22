@@ -47,7 +47,7 @@ func TestIsSolved(t *testing.T) {
 	}
 }
 
-func TestTestEq(t *testing.T) {
+func TestisEqRegex(t *testing.T) {
 	r1 := regexp.MustCompile("123")
 	r2 := regexp.MustCompile("456")
 	tables := []struct {
@@ -61,7 +61,7 @@ func TestTestEq(t *testing.T) {
 		{[]*regexp.Regexp{r1}, []*regexp.Regexp{r1, r2}, false},
 	}
 	for _, table := range tables {
-		if testEq(table.regex1, table.regex2) != table.expected {
+		if isEqRegex(table.regex1, table.regex2) != table.expected {
 			t.Errorf("Got unexpected result when comparing %s and %s. Got %v", table.regex1, table.regex2, !table.expected)
 		}
 	}

@@ -11,7 +11,7 @@ func isSolved(p *RegexPuzzle) bool {
 	return true
 }
 
-func testEq(a, b []*regexp.Regexp) bool {
+func isEqRegex(a, b []*regexp.Regexp) bool {
 	if a == nil && b == nil {
 		return true
 	}
@@ -25,6 +25,40 @@ func testEq(a, b []*regexp.Regexp) bool {
 		if a[i] != b[i] {
 			return false
 		}
+	}
+	return true
+}
+
+func isEqCells(a, b []*RegexCell) bool {
+	if a == nil && b == nil {
+		return true
+	}
+	if a == nil || b == nil {
+		return false
+	}
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i].GetCellContent() != b[i].GetCellContent() {
+			return false
+		}
+	}
+	return true
+}
+
+func isEqRows(a, b *RegexRow) bool {
+	if a == nil && b == nil {
+		return true
+	}
+	if a == nil || b == nil {
+		return false
+	}
+	if len(a.Cells) != len(b.Cells) || len(a.Expressions) != len(b.Expressions) {
+		return false
+	}
+	if !isEqCells(a.Cells, b.Cells) || !isEqRegex(a.Expressions, b.Expressions) {
+		return false
 	}
 	return true
 }
