@@ -67,6 +67,24 @@ func TestIsEqRegex(t *testing.T) {
 	}
 }
 
+func TestIsEqCell(t *testing.T) {
+	tables := []struct {
+		cell1    *RegexCell
+		cell2    *RegexCell
+		expected bool
+	}{
+		{nil, nil, true},
+		{&RegexCell{"a"}, nil, false},
+		{&RegexCell{"a"}, &RegexCell{"a"}, true},
+		{&RegexCell{"a"}, &RegexCell{"b"}, false},
+	}
+	for _, table := range tables {
+		if isEqCell(table.cell1, table.cell2) != table.expected {
+			t.Errorf("Unexpected result from isEqCells when comparing %s and %s. Got %v", table.cell1, table.cell2, !table.expected)
+		}
+	}
+}
+
 func TestIsEqCells(t *testing.T) {
 	c1 := RegexCell{"a"}
 	c2 := RegexCell{"b"}

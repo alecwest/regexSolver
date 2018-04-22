@@ -29,6 +29,16 @@ func isEqRegex(a, b []*regexp.Regexp) bool {
 	return true
 }
 
+func isEqCell(a, b *RegexCell) bool {
+	if a == nil && b == nil {
+		return true
+	}
+	if a == nil || b == nil {
+		return false
+	}
+	return a.GetCellContent() == b.GetCellContent()
+}
+
 func isEqCells(a, b []*RegexCell) bool {
 	if a == nil && b == nil {
 		return true
