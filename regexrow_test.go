@@ -41,6 +41,31 @@ func TestAddExpression(t *testing.T) {
 	}
 }
 
+func TestIsFull(t *testing.T) {
+	tables := []struct {
+		row      RegexRow
+		expected bool
+	}{
+		{
+			RegexRow{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}},
+			true,
+		},
+		{
+			RegexRow{[]*RegexCell{{"a"}, {""}, {"c"}}, []*regexp.Regexp{}},
+			false,
+		},
+		{
+			RegexRow{[]*RegexCell{{""}, {""}, {""}}, []*regexp.Regexp{}},
+			false,
+		},
+	}
+	for _, table := range tables {
+		if table.row.IsFull() != table.expected {
+			t.Errorf("Unexpected result when calling IsFull() on %s, expected %v", table.row, table.expected)
+		}
+	}
+}
+
 func TestIsValidRow(t *testing.T) {
 	// TODO figure out how to make a table for this
 	var row1 RegexRow
