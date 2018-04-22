@@ -81,34 +81,27 @@ func TestNextRow(t *testing.T) {
 		{
 			RegexPuzzle{
 				[]RegexCell{{"a"}, {"b"}, {"c"}},
-				[]RegexRow{
-					{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}},
-					expectedRow1,
-					{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}},
-				},
-			}, &expectedRow1,
+				[]RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
+			nil,
 		},
 		{
 			RegexPuzzle{
 				[]RegexCell{{"a"}, {"b"}, {"c"}},
-				[]RegexRow{
-					{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}},
-					expectedRow2,
-					{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}},
-				},
-			}, &expectedRow2,
+				[]RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}, expectedRow1, {[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
+			&expectedRow1,
+		},
+		{
+			RegexPuzzle{
+				[]RegexCell{{"a"}, {"b"}, {"c"}},
+				[]RegexRow{{[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}, expectedRow2, {[]*RegexCell{{"a"}, {"b"}, {"c"}}, []*regexp.Regexp{}}}},
+			&expectedRow2,
 		},
 		{
 			// Sample table from https://regexcrossword.com/challenges/beginner/puzzles/1
 			RegexPuzzle{
 				[]RegexCell{{"h"}, {"e"}, {"l"}, {"p"}},
-				[]RegexRow{
-					{[]*RegexCell{{"h"}, {"e"}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}},
-					expectedRow3,
-					{[]*RegexCell{{"h"}, {""}}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}},
-					{[]*RegexCell{{"e"}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}},
-				},
-			}, &expectedRow3,
+				[]RegexRow{{[]*RegexCell{{"h"}, {"e"}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}}, expectedRow3, {[]*RegexCell{{"h"}, {""}}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}}, {[]*RegexCell{{"e"}, {"p"}}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}}}},
+			&expectedRow3,
 		},
 	}
 
