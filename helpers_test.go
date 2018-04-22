@@ -72,24 +72,42 @@ func TestIsEqCells(t *testing.T) {
 	c2 := RegexCell{"b"}
 	c3 := RegexCell{"c"}
 	tables := []struct {
-		row1     RegexRow
-		row2     RegexRow
+		row1     *RegexRow
+		row2     *RegexRow
 		expected bool
 	}{
-		{
-			RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}},
-			RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}},
-			true,
-		},
-		{
-			RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}},
-			RegexRow{[]*RegexCell{&c1, &RegexCell{"d"}, &c3}, []*regexp.Regexp{}},
-			false,
-		},
+		{nil, nil, true},
+		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}}, nil, false},
+		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}}, &RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}}, true},
+		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{}}, &RegexRow{[]*RegexCell{&c1, &RegexCell{"d"}, &c3}, []*regexp.Regexp{}}, false},
 	}
 	for _, table := range tables {
 		if isEqCells(table.row1.Cells, table.row2.Cells) != table.expected {
-			t.Errorf("Unexpected result from isEqCells when comparing %s and %s. Got %v", table.row1, table.row2, !table.expected)
+			t.Errorf("Unexpected result from isEqCells when comparing %s and %s. Got %v", table.row1.Cells, table.row2.Cells, !table.expected)
+		}
+	}
+}
+
+func TestIsEqRows(t *testing.T) {
+	r1 := regexp.MustCompile("123")
+	r2 := regexp.MustCompile("456")
+	c1 := RegexCell{"a"}
+	c2 := RegexCell{"b"}
+	c3 := RegexCell{"c"}
+	tables := []struct {
+		row1     *RegexRow
+		row2     *RegexRow
+		expected bool
+	}{
+		{nil, nil, true},
+		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, nil, false},
+		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, &RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, true},
+		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, &RegexRow{[]*RegexCell{&c1, &RegexCell{"d"}, &c3}, []*regexp.Regexp{r1, r2}}, false},
+		{&RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{r1, r2}}, &RegexRow{[]*RegexCell{&c1, &c2, &c3}, []*regexp.Regexp{regexp.MustCompile("aaa"), r2}}, false},
+	}
+	for _, table := range tables {
+		if isEqRows(table.row1, table.row2) != table.expected {
+			t.Errorf("Unexpected result from isEqRows when comparing %s and %s. Got %v", table.row1, table.row2, !table.expected)
 		}
 	}
 }
