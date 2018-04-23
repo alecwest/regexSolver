@@ -18,15 +18,16 @@ func (rp *RegexPuzzle) Solve() {
 
 }
 
-func (rp *RegexPuzzle) solve(p *RegexPuzzle) *RegexPuzzle {
+func (rp *RegexPuzzle) solve(p RegexPuzzle) *RegexPuzzle {
 	vals := strings.Split("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(){}[]/=\\?+|-_',.\"<>`~", "")
 	// nextRow := p.NextRow()
 	nextCell := p.NextCell()
 
 	for _, char := range vals {
 		nextCell.SetCellContent(char)
-		if isValidWithNewCell(nextCell, p) {
-
+		if isValidWithNewCell(nextCell, &p) {
+			p.SetNextCell(nextCell.GetCellContent())
+			return rp.solve(p)
 		}
 		// if isCellValidInRow()
 	}
