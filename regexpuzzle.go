@@ -15,13 +15,19 @@ type RegexPuzzle struct {
 
 // Solve will run a recursive backtracking algorithm to solve the puzzle
 func (rp *RegexPuzzle) Solve() {
-
+	rp = rp.solve(*rp)
 }
 
 func (rp *RegexPuzzle) solve(p RegexPuzzle) *RegexPuzzle {
 	vals := strings.Split("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(){}[]/=\\?+|-_',.\"<>`~", "")
 	// nextRow := p.NextRow()
 	nextCell := p.NextCell()
+	if nextCell == nil {
+		if isSolved(&p) {
+			return &p
+		}
+		return nil
+	}
 
 	for _, char := range vals {
 		nextCell.SetCellContent(char)
