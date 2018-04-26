@@ -31,11 +31,10 @@ func (rp *RegexPuzzle) solve(p RegexPuzzle) *RegexPuzzle {
 
 	for _, char := range vals {
 		nextCell.SetCellContent(char)
-		if isValidWithNewCell(nextCell, &p) {
+		if isValidWithNewCell(*nextCell, p) {
 			p.SetNextCell(nextCell.GetCellContent())
 			return rp.solve(p)
 		}
-		// if isCellValidInRow()
 	}
 
 	return nil

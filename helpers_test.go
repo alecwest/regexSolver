@@ -207,7 +207,7 @@ func TestIsValidWithNewCell(t *testing.T) {
 	}
 	for _, table := range tables {
 		newCell := &RegexCell{table.newValue}
-		if isValidWithNewCell(newCell, table.puzzle) != table.expected {
+		if isValidWithNewCell(*newCell, *table.puzzle) != table.expected {
 			t.Errorf("Unexpected result from isValidWithNewCell function call on puzzle %s with cell %s, expected %v", table.puzzle, newCell, table.expected)
 		}
 	}
