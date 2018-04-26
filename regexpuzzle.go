@@ -1,8 +1,11 @@
 package regexsolver
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
+
+	log "gopkg.in/inconshreveable/log15.v2"
 )
 
 // RegexPuzzle represents a two-dimensional object containing multiple cells.
@@ -31,6 +34,8 @@ func (rp *RegexPuzzle) solve(p RegexPuzzle) *RegexPuzzle {
 
 	for _, char := range vals {
 		nextCell.SetCellContent(char)
+		log.Debug(fmt.Sprintf("New cell with content %s is being added to the puzzle", nextCell.GetCellContent()))
+		log.Debug(fmt.Sprintf("puzzle is %s", p))
 		if isValidWithNewCell(*nextCell, p) {
 			p.SetNextCell(nextCell.GetCellContent())
 			return rp.solve(p)

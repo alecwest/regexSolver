@@ -2,6 +2,8 @@ package regexsolver
 
 import (
 	"regexp"
+
+	copier "github.com/jinzhu/copier"
 )
 
 func isSolved(p *RegexPuzzle) bool {
@@ -85,6 +87,8 @@ func isValid(puzzle RegexPuzzle) bool {
 }
 
 func isValidWithNewCell(cell RegexCell, puzzle RegexPuzzle) bool {
-	puzzle.NextCell().SetCellContent(cell.GetCellContent())
-	return isValid(puzzle)
+	var puzzleCopy RegexPuzzle
+	copier.Copy(puzzleCopy, puzzle)
+	puzzleCopy.NextCell().SetCellContent(cell.GetCellContent())
+	return isValid(puzzleCopy)
 }
