@@ -5,6 +5,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/jinzhu/copier"
+
 	log "gopkg.in/inconshreveable/log15.v2"
 )
 
@@ -22,21 +24,22 @@ func (rp *RegexPuzzle) Solve() {
 }
 
 func (rp *RegexPuzzle) solve(p RegexPuzzle) *RegexPuzzle {
+	var nextCell RegexCell
 	vals := strings.Split("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(){}[]/=\\?+|-_',.\"<>`~", "")
-	// nextRow := p.NextRow()
-	nextCell := p.NextCell()
-	if nextCell == nil {
+	temp := p.NextCell()
+	if temp == nil {
 		if isSolved(&p) {
 			return &p
 		}
 		return nil
 	}
+	copier.Copy(nextCell, temp)
 
 	for _, char := range vals {
 		nextCell.SetCellContent(char)
 		log.Debug(fmt.Sprintf("New cell with content %s is being added to the puzzle", nextCell.GetCellContent()))
 		log.Debug(fmt.Sprintf("puzzle is %s", p))
-		if isValidWithNewCell(*nextCell, p) {
+		if isValidWithNewCell(nextCell, p) {
 			p.SetNextCell(nextCell.GetCellContent())
 			return rp.solve(p)
 		}
