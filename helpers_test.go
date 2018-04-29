@@ -135,12 +135,12 @@ func TestIsEqRows(t *testing.T) {
 
 func TestIsValid(t *testing.T) {
 	tables := []struct {
-		puzzle   RegexPuzzle
+		puzzle   *RegexPuzzle
 		expected bool
 	}{
 		{
 			// Sample table from https://regexcrossword.com/challenges/beginner/puzzles/1
-			RegexPuzzle{
+			&RegexPuzzle{
 				[]*RegexCell{{"h"}, {"e"}, {"l"}, {"p"}},
 				[]*RegexRow{
 					{[]*RegexCell{{"h"}, {"e"}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}},
@@ -151,7 +151,7 @@ func TestIsValid(t *testing.T) {
 			}, true,
 		},
 		{
-			RegexPuzzle{
+			&RegexPuzzle{
 				[]*RegexCell{{"h"}, {"e"}, {"l"}, {"d"}},
 				[]*RegexRow{
 					{[]*RegexCell{{"h"}, {"e"}}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}},
@@ -207,7 +207,7 @@ func TestIsValidWithNewCell(t *testing.T) {
 	}
 	for _, table := range tables {
 		newCell := &RegexCell{table.newValue}
-		if isValidWithNewCell(*newCell, *table.puzzle) != table.expected {
+		if isValidWithNewCell(newCell, table.puzzle) != table.expected {
 			t.Errorf("Unexpected result from isValidWithNewCell function call on puzzle %s with cell %s, expected %v", table.puzzle, newCell, table.expected)
 		}
 	}

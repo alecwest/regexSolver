@@ -39,7 +39,7 @@ func (rp *RegexPuzzle) solve(p RegexPuzzle) *RegexPuzzle {
 		nextCell.SetCellContent(char)
 		log.Debug(fmt.Sprintf("New cell with content %s is being added to the puzzle", nextCell.GetCellContent()))
 		log.Debug(fmt.Sprintf("puzzle is %s", p))
-		if isValidWithNewCell(nextCell, p) {
+		if isValidWithNewCell(&nextCell, &p) {
 			p.SetNextCell(nextCell.GetCellContent())
 			return rp.solve(p)
 		}

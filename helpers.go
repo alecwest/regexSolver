@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"regexp"
 
-	copier "github.com/jinzhu/copier"
 	log "gopkg.in/inconshreveable/log15.v2"
 )
 
@@ -79,7 +78,7 @@ func isEqRows(a, b *RegexRow) bool {
 	return true
 }
 
-func isValid(puzzle RegexPuzzle) bool {
+func isValid(puzzle *RegexPuzzle) bool {
 	for _, row := range puzzle.CellRows {
 		if !row.IsValidRow() {
 			return false
@@ -88,9 +87,9 @@ func isValid(puzzle RegexPuzzle) bool {
 	return true
 }
 
-func isValidWithNewCell(cell RegexCell, puzzle RegexPuzzle) bool {
-	var puzzleCopy RegexPuzzle
-	copier.Copy(puzzleCopy, puzzle)
+func isValidWithNewCell(cell *RegexCell, puzzle *RegexPuzzle) bool {
+	var puzzleCopy = &RegexPuzzle{[]*RegexCell{}, []*RegexRow{}}
+	*puzzleCopy = *puzzle
 	log.Debug(fmt.Sprintf("puzzle is %s", puzzleCopy))
 	nextCell := puzzleCopy.NextCell()
 	if nextCell == nil {
