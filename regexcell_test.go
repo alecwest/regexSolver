@@ -26,3 +26,11 @@ func TestValidCellContent(t *testing.T) {
 		}
 	}
 }
+
+func TestNilCell(t *testing.T) {
+	var cell *RegexCell
+	err := cell.SetCellContent("")
+	if err == nil {
+		t.Errorf("Cell was nil, but was able to be set unexpectedly. Error was %s", err)
+	}
+}

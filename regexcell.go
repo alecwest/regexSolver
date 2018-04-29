@@ -16,7 +16,9 @@ func (rc *RegexCell) GetCellContent() string {
 // SetCellContent sets the RegexCell content value
 // Value must be no more than one character in length
 func (rc *RegexCell) SetCellContent(c string) error {
-	if len(c) <= 1 {
+	if rc == nil {
+		return fmt.Errorf(fmt.Sprintf("Cell was nil"))
+	} else if len(c) <= 1 {
 		rc.content = c
 	} else {
 		return fmt.Errorf(fmt.Sprintf("Cell content cannot be greater than one character in length, but got %s", c))
