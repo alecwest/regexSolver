@@ -1,9 +1,11 @@
 package regexsolver
 
 import (
+	"fmt"
 	"regexp"
 
 	copier "github.com/jinzhu/copier"
+	log "gopkg.in/inconshreveable/log15.v2"
 )
 
 func isSolved(p *RegexPuzzle) bool {
@@ -89,6 +91,11 @@ func isValid(puzzle RegexPuzzle) bool {
 func isValidWithNewCell(cell RegexCell, puzzle RegexPuzzle) bool {
 	var puzzleCopy RegexPuzzle
 	copier.Copy(puzzleCopy, puzzle)
-	puzzleCopy.NextCell().SetCellContent(cell.GetCellContent())
+	log.Debug(fmt.Sprintf("puzzle is %s", puzzleCopy))
+	nextCell := puzzleCopy.NextCell()
+	if nextCell == nil {
+		return false
+	}
+	nextCell.SetCellContent(cell.GetCellContent())
 	return isValid(puzzleCopy)
 }
