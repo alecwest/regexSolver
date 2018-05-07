@@ -177,9 +177,10 @@ func TestIsValidWithNewCell(t *testing.T) {
 	c5 := &RegexCell{"e"}
 	c6 := &RegexCell{""}
 	tables := []struct {
-		puzzle   *RegexPuzzle
-		newValue string
-		expected bool
+		puzzle     *RegexPuzzle
+		newValue   string
+		expected   bool
+		noNextCell bool
 	}{
 		{
 			// Sample table from https://regexcrossword.com/challenges/beginner/puzzles/1
@@ -191,7 +192,7 @@ func TestIsValidWithNewCell(t *testing.T) {
 					{[]*RegexCell{c1, c3}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}},
 					{[]*RegexCell{c2, c4}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}},
 				},
-			}, "e", true,
+			}, "e", true, false,
 		},
 		{
 			&RegexPuzzle{
@@ -202,7 +203,18 @@ func TestIsValidWithNewCell(t *testing.T) {
 					{[]*RegexCell{c1, c3}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}},
 					{[]*RegexCell{c5, c6}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}},
 				},
-			}, "d", false,
+			}, "d", false, false,
+		},
+		{
+			&RegexPuzzle{
+				[]*RegexCell{c1, c5, c3, c4},
+				[]*RegexRow{
+					{[]*RegexCell{c1, c5}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}},
+					{[]*RegexCell{c3, c4}, []*regexp.Regexp{regexp.MustCompile("[please]+")}},
+					{[]*RegexCell{c1, c3}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}},
+					{[]*RegexCell{c5, c4}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}},
+				},
+			}, "d", false, true,
 		},
 	}
 	for _, table := range tables {
@@ -210,7 +222,7 @@ func TestIsValidWithNewCell(t *testing.T) {
 		if isValidWithNewCell(newCell, table.puzzle) != table.expected {
 			t.Errorf("Unexpected result from isValidWithNewCell function call on puzzle %s with cell %s, expected %v", table.puzzle, newCell, table.expected)
 		}
-		if table.puzzle.NextCell() == nil {
+		if !table.noNextCell && table.puzzle.NextCell() == nil {
 			t.Errorf("isValidWithNewCell unintentionally added content to the puzzle %s", table.puzzle)
 		}
 	}
