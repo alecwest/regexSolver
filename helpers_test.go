@@ -210,5 +210,8 @@ func TestIsValidWithNewCell(t *testing.T) {
 		if isValidWithNewCell(newCell, table.puzzle) != table.expected {
 			t.Errorf("Unexpected result from isValidWithNewCell function call on puzzle %s with cell %s, expected %v", table.puzzle, newCell, table.expected)
 		}
+		if table.puzzle.NextCell() == nil {
+			t.Errorf("isValidWithNewCell unintentionally added content to the puzzle %s", table.puzzle)
+		}
 	}
 }

@@ -1,10 +1,7 @@
 package regexsolver
 
 import (
-	"fmt"
 	"regexp"
-
-	log "gopkg.in/inconshreveable/log15.v2"
 )
 
 func isSolved(p *RegexPuzzle) bool {
@@ -88,13 +85,12 @@ func isValid(puzzle *RegexPuzzle) bool {
 }
 
 func isValidWithNewCell(cell *RegexCell, puzzle *RegexPuzzle) bool {
-	var puzzleCopy = &RegexPuzzle{[]*RegexCell{}, []*RegexRow{}}
-	*puzzleCopy = *puzzle
-	log.Debug(fmt.Sprintf("puzzle is %s", puzzleCopy))
-	nextCell := puzzleCopy.NextCell()
+	nextCell := puzzle.NextCell()
 	if nextCell == nil {
 		return false
 	}
 	nextCell.SetCellContent(cell.GetCellContent())
-	return isValid(puzzleCopy)
+	result := isValid(puzzle)
+	nextCell.SetCellContent("")
+	return result
 }
