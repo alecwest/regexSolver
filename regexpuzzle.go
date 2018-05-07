@@ -2,6 +2,7 @@ package regexsolver
 
 import (
 	"fmt"
+	"math/rand"
 	"regexp"
 	"strings"
 
@@ -16,6 +17,19 @@ import (
 type RegexPuzzle struct {
 	Cells    []*RegexCell
 	CellRows []*RegexRow
+}
+
+// RandomSolve will pick letters randomly until the puzzle is solved
+func (rp *RegexPuzzle) RandomSolve() {
+	vals := strings.Split("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(){}[]/=\\?+|-_',.\"<>`~", "")
+	for !isSolved(rp) {
+		for _, cell := range rp.Cells {
+			cell.SetCellContent("")
+		}
+		for _, cell := range rp.Cells {
+			cell.SetCellContent(vals[rand.Intn(len(vals)-1)])
+		}
+	}
 }
 
 // Solve will run a recursive backtracking algorithm to solve the puzzle

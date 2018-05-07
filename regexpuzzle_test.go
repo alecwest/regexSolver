@@ -167,7 +167,38 @@ func TestSetNextCell(t *testing.T) {
 	}
 }
 
-func TestSolve(t *testing.T) {
+func TestRandomSolve(t *testing.T) {
+	cells := []*RegexCell{
+		&RegexCell{""},
+		&RegexCell{""},
+		&RegexCell{""},
+		&RegexCell{""},
+	}
+	tables := []struct {
+		puzzle *RegexPuzzle
+	}{
+		{
+			// Sample table from https://regexcrossword.com/challenges/beginner/puzzles/1
+			&RegexPuzzle{
+				[]*RegexCell{cells[0], cells[1], cells[2], cells[3]},
+				[]*RegexRow{
+					{[]*RegexCell{cells[0], cells[1]}, []*regexp.Regexp{regexp.MustCompile("he|ll|o+")}},
+					{[]*RegexCell{cells[2], cells[3]}, []*regexp.Regexp{regexp.MustCompile("[please]+")}},
+					{[]*RegexCell{cells[0], cells[2]}, []*regexp.Regexp{regexp.MustCompile("[^speak]+")}},
+					{[]*RegexCell{cells[1], cells[3]}, []*regexp.Regexp{regexp.MustCompile("ep|ip|ef")}},
+				},
+			},
+		},
+	}
+	for _, table := range tables {
+		table.puzzle.RandomSolve()
+		if !isSolved(table.puzzle) {
+			t.Errorf("Puzzle was not solved. Got %s", table.puzzle)
+		}
+	}
+}
+
+func xTestSolve(t *testing.T) {
 	cells := []*RegexCell{
 		&RegexCell{""},
 		&RegexCell{""},
