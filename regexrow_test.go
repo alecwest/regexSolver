@@ -41,6 +41,44 @@ func TestAddExpression(t *testing.T) {
 	}
 }
 
+func TestCellInRow(t *testing.T) {
+	c1 := &RegexCell{"a"}
+	c2 := &RegexCell{"b"}
+	c3 := &RegexCell{"c"}
+	c4 := &RegexCell{"d"}
+	tables := []struct {
+		row      *RegexRow
+		cell     *RegexCell
+		expected bool
+	}{
+		{
+			&RegexRow{[]*RegexCell{{"e"}, {"f"}, c1}, []*regexp.Regexp{}},
+			c1,
+			true,
+		},
+		{
+			&RegexRow{[]*RegexCell{{"e"}, {"f"}, c2}, []*regexp.Regexp{}},
+			c3,
+			false,
+		},
+		{
+			&RegexRow{[]*RegexCell{c3, {"f"}, c2}, []*regexp.Regexp{}},
+			c3,
+			true,
+		},
+		{
+			&RegexRow{[]*RegexCell{c4, {"f"}, c2}, []*regexp.Regexp{}},
+			c3,
+			false,
+		},
+	}
+	for _, table := range tables {
+		if table.row.CellInRow(table.cell) != table.expected {
+			t.Errorf("Unexpected result from CellInRow for row %s and cell %s, expected %v", table.row, table.cell, table.expected)
+		}
+	}
+}
+
 func TestIsFull(t *testing.T) {
 	tables := []struct {
 		row      RegexRow

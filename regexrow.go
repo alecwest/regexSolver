@@ -23,6 +23,17 @@ func (rr *RegexRow) AddExpression(e *regexp.Regexp) {
 	rr.Expressions = append(rr.Expressions, e)
 }
 
+// CellInRow returns true if the cell passed in exists
+// in this row.
+func (rr *RegexRow) CellInRow(rc *RegexCell) bool {
+	for _, cell := range rr.Cells {
+		if *rc == *cell {
+			return true
+		}
+	}
+	return false
+}
+
 // IsFull returns a boolean indicating whether or not all cells
 // within the row have been set to some value
 func (rr *RegexRow) IsFull() bool {
